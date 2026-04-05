@@ -1,6 +1,0 @@
-?start: expr
-?expr: num
-     | num "^" expr    -> potencia_der
-num: /\d+/
-%import common.WS
-%ignore WS
