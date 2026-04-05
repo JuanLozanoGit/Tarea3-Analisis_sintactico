@@ -1,22 +1,42 @@
-import os
+import sys
 from lark import Lark, tree
 
-def probar_gramatica(nombre_archivo, cadena, tag):
-    with open(nombre_archivo, 'r') as f:
-        grammar = f.read()
+def ejecutar_pruebas(archivo_txt):
+    # Gramatica que combina ambas para demostrar la diferencia
+    grammar = """
+        ?start: asignacion | expr_potencia | expr_suma
+
+        # Asociatividad por Derecha (Asignacion)
+        asignacion: ID "=" asignacion | ID "=" num
+        
+        # Asociatividad por Derecha (Potencia)
+        ?expr_potencia: num "^" expr_potencia -> pot_der
+                      | num
+        
+        # Asociatividad por Izquierda (Suma)
+        ?expr_suma: expr_suma "+" num -> suma_izq
+                  | num
+
+        num: /\d+/
+        ID: /[a-z]/
+        %import common.WS
+        %ignore WS
+    """
     
     parser = Lark(grammar, start='start', parser='earley')
-    try:
-        arbol = parser.parse(cadena)
-        output = f"ast_{tag}.png"
-        tree.pydot__tree_to_png(arbol, output)
-        print(f"Gramática {tag}: Procesada. Ver {output}")
-    except Exception as e:
-        print(f"Error en {tag}: {e}")
+
+    with open(archivo_txt, 'r') as f:
+        lineas = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+
+    for i, cadena in enumerate(lineas):
+        try:
+            arbol = parser.parse(cadena)
+            nombre = f"resultado_asoc_{i+1}.png"
+            tree.pydot__tree_to_png(arbol, nombre)
+            print(f"Procesada: {cadena} -> {nombre}")
+        except Exception as e:
+            print(f"Error en '{cadena}': {e}")
 
 if __name__ == "__main__":
-    # Prueba de asociatividad izquierda (Suma)
-    probar_gramatica("gramatica_izquierda.lark", "2 + 3 + 4", "izquierda")
-    
-    # Prueba de asociatividad derecha (Potencia)
-    probar_gramatica("gramatica_derecha.lark", "2 ^ 3 ^ 4", "derecha")
+    archivo = sys.argv[1] if len(sys.argv) > 1 else "pruebas_asociatividad.txt"
+    ejecutar_pruebas(archivo)
