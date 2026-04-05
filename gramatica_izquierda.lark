@@ -1,0 +1,6 @@
+?start: expr
+?expr: num
+     | expr "+" num    -> suma_izq
+num: /\d+/
+%import common.WS
+%ignore WS
