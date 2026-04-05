@@ -1,0 +1,14 @@
+# Pruebas de Asociatividad por Izquierda (Suma/Resta)
+# El arbol debe agrupar (2+3)+4
+2 + 3 + 4
+10 - 5 - 2
+
+# Pruebas de Asociatividad por Derecha (Potencia/Asignacion)
+# El arbol debe agrupar 2^(3^4)
+2 ^ 3 ^ 4
+x = y = 5
+
+# Pruebas de Precedencia (Combinadas)
+# El arbol debe priorizar la multiplicacion
+2 + 3 * 4
+(2 + 3) * 4
