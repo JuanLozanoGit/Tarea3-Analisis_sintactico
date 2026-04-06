@@ -5,7 +5,7 @@
 3. **Precedencia:** Confirmar que la multiplicación (`*`) tenga mayor prioridad que la suma (`+`), apareciendo en niveles más profundos del árbol.
 
 ## Requisitos
-- **Python 3.x**
+- **Python 3.1**
 - **Graphviz** (Instalación en Kali: `sudo apt install graphviz -y`)
 - **Librerías:** ```bash
   pip install lark pydot --break-system-packages
