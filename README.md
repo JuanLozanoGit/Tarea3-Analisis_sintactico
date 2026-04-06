@@ -4,7 +4,7 @@
 2. **Asociatividad por Derecha:** Verificar que la potencia (`^`) y la asignación (`=`) se agrupen de derecha a izquierda.
 3. **Precedencia:** Confirmar que la multiplicación (`*`) tenga mayor prioridad que la suma (`+`), apareciendo en niveles más profundos del árbol.
 
-## 🛠️ Requisitos
+## Requisitos
 - **Python 3.x**
 - **Graphviz** (Instalación en Kali: `sudo apt install graphviz -y`)
 - **Librerías:** ```bash
