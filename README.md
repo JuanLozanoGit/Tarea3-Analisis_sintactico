@@ -7,7 +7,8 @@
 ## Requisitos
 - **Python 3.1**
 - **Graphviz** (Instalación en Kali: `sudo apt install graphviz -y`)
-- **Librerías:** ```bash
+- **Librerías:**
+- ```bash
   pip install lark pydot --break-system-packages
   ```
 
