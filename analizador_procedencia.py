@@ -2,20 +2,26 @@ import sys
 from lark import Lark, tree
 
 def ejecutar_pruebas(archivo_txt):
-    # Gramatica que combina ambas para demostrar la diferencia
-    grammar = """
-        ?start: asignacion | expr_potencia | expr_suma
+    # Gramática completa para asociatividad y precedencia
+    grammar = r"""
+        ?start: asignacion | expr_suma
 
-        # Asociatividad por Derecha (Asignacion)
+        # Asociatividad por Derecha (Asignación)
         asignacion: ID "=" asignacion | ID "=" num
         
-        # Asociatividad por Derecha (Potencia)
-        ?expr_potencia: num "^" expr_potencia -> pot_der
-                      | num
-        
-        # Asociatividad por Izquierda (Suma)
-        ?expr_suma: expr_suma "+" num -> suma_izq
-                  | num
+        # Jerarquía de operaciones (Asociatividad y Precedencia)
+        ?expr_suma: expr_suma ("+" | "-") term  -> suma_izq  // Izquierda
+                  | term
+
+        ?term: term ("*" | "/") factor          -> mul_izq   // Izquierda
+             | factor
+
+        ?factor: atom "^" factor                -> pot_der   // Derecha
+               | atom
+
+        ?atom: num
+             | ID
+             | "(" expr_suma ")"
 
         num: /\d+/
         ID: /[a-z]/
@@ -25,8 +31,12 @@ def ejecutar_pruebas(archivo_txt):
     
     parser = Lark(grammar, start='start', parser='earley')
 
-    with open(archivo_txt, 'r') as f:
-        lineas = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+    try:
+        with open(archivo_txt, 'r') as f:
+            lineas = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+    except FileNotFoundError:
+        print(f"Error: No se encontró {archivo_txt}")
+        return
 
     for i, cadena in enumerate(lineas):
         try:
